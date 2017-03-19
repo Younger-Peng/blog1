@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>轮播图</title>
+<style>
+    ul,
+    li {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    .carousel {
+        position: relative;
+        overflow: hidden;
+        width: 500px;
+        height: 350px;
+        margin: 10px auto;
+    }
+    .picture {
+        width: 3500px;
+        height: 350px;
+    }
+    .picture>li {
+        float: left;
+    }
+    .picture img {
+        width: 500px;
+        height: 350px;
+    }
+    button {
+        position: absolute;
+        display: block;
+        outline-style: none;
+        width: 30px;
+        height: 30px;
+        padding: 0;
+        border: 1px solid #fff;
+        border-radius: 50%;
+        color: #fff;
+        background: transparent;
+        text-align: center;
+        line-height: 28px;
+        font-size: 15px;
+        top: 50%;
+        margin-top: -25px;
+        cursor: pointer;
+    }
+    button.btn-pre {
+        left: 10px;
+    }
+    button.btn-next {
+        right: 10px;
+    }
+    .index-bar {
+        margin: 0;
+        position: absolute;
+        bottom: 20px;
+        font-size: 0;
+        left: 0;
+        right: 0;
+        text-align: center;
+    }
+    .bar {
+        display: inline-block;
+        width: 30px;
+        height: 5px;
+        margin: 0 5px;
+        border: 1px solid #fff;
+        border-radius: 2.5px;
+        cursor: pointer;
+
+    }
+    .active {
+        background: rgba(255,255,255,.5);
+
+    }
+
+</style>
+</head>
+<body>
+    <div class="carousel">
+        <ul class="picture">
+            <li class='index0'><a href="javascript:void(0)"><img src="http://cdn.jirengu.com/book.jirengu.com/img/1.jpg"></a></li>
+            <li class='index1'><a href="javascript:void(0)"><img src="http://cdn.jirengu.com/book.jirengu.com/img/2.jpg"></a></li>
+            <li class='index2'><a href="javascript:void(0)"><img src="http://cdn.jirengu.com/book.jirengu.com/img/3.jpg"></a></li>
+            <li class='index3'><a href="javascript:void(0)"><img src="http://cdn.jirengu.com/book.jirengu.com/img/4.jpg"></a></li>
+            <li class='index4'><a href="javascript:void(0)"><img src="http://cdn.jirengu.com/book.jirengu.com/img/5.jpg"></a></li>
+        </ul>
+        <button class='btn btn-pre'>&lt;</button>
+        <button class='btn btn-next'>&gt;</button>
+        <ul class="index-bar">
+            <li class='bar active'></li>
+            <li class='bar'></li>
+            <li class='bar'></li>
+            <li class='bar'></li>
+            <li class='bar'></li>
+        </ul>
+    </div>
+
+	<script src='js/jquery-3.1.1.min.js'></script>
+    <script>
+        var $btnPre = $('.btn-pre'),
+            $picture = $('.picture'),
+            $btnNext = $('.btn-next'),
+            index = 1,
+            $lastItem = $picture.children().last().clone(),
+            $firstItem = $picture.children().first().clone();
+        $picture.prepend($lastItem)//克隆最后一份放到第一份的前面
+        $picture.append($firstItem)//克隆第一份放到最后一份的后面
+        $('.picture').css('margin-left','-500px')
+        $btnPre.on('click',function(){//点击左侧箭头执行此函数
+            showPre(1)
+        })
+        $btnNext.on('click',function(){//点击右侧箭头执行此函数
+            showNext(1)
+        })
+
+        $('.index-bar').on('click','li',function(){//点击下侧状态条时，添加事件代理执行此匿名函数
+            var index = $('.active').index()//点击前，状态条的位置
+            var indexClick = $(this).index()//被点击时的状态条的位置
+            if(indexClick<index){
+                showPre(index-indexClick)
+            }else if(indexClick>index){
+                showNext(indexClick-index)
+            }
+        })
+        function showPre(n){
+            $('.picture').animate({'margin-left':'+='+500*n+'px'},function(){
+                if($('.picture').css('margin-left') === '0px'){//当图片播放到最前面的克隆元素后，瞬间切换到最后一张图片
+                    $('.picture').css('margin-left','-2500px')
+                }
+                index = index - n
+                changeBar(index)
+            })  
+        }
+        function showNext(n){
+            $('.picture').animate({'margin-left':'-='+500*n+'px'},function(){
+                if($('.picture').css('margin-left') === '-3000px'){//当图片播放到最后面的克隆元素后，瞬间切换到第一张图片
+                    console.log(1)
+                    $('.picture').css('margin-left','-500px')
+                }
+                index = index + n
+                changeBar(index)
+            })
+        }
+        function changeBar(index){
+            if(index === 0){//当状态条的index值减到0时，瞬间切换到最后一个状态条
+                index = 5
+            }else if(index === 6){//当状态条的index值增加到6时，瞬间切换到第一个状态条
+                        index = 1
+            }
+            $('.bar').each(function(){
+                $(this).removeClass('active')
+            })
+            $('.bar:nth-child('+index+')').addClass('active')
+        }
+  	</script>
+</body>
+</html>
