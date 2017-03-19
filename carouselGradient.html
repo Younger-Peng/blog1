@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>滚动轮播图</title>
+<title>渐变轮播图</title>
 <style>
     ul,
     li {
@@ -12,6 +12,7 @@
         padding: 0;
     }
     .carousel {
+        border: 1px solid red;
         position: relative;
         overflow: hidden;
         width: 500px;
@@ -19,11 +20,16 @@
         margin: 10px auto;
     }
     .picture {
-        width: 3500px;
+        width: 500px;
         height: 350px;
     }
     .picture>li {
-        float: left;
+        position: absolute;
+        opacity: 0;
+        transition: .8s all ease;
+    }
+    .picture>.active {
+        opacity: 1;
     }
     .picture img {
         width: 500px;
@@ -82,7 +88,7 @@
 <body>
     <div class="carousel">
         <ul class="picture">
-            <li class='index0'><a href="javascript:void(0)"><img src="http://cdn.jirengu.com/book.jirengu.com/img/1.jpg"></a></li>
+            <li class='index0 active'><a href="javascript:void(0)"><img src="http://cdn.jirengu.com/book.jirengu.com/img/1.jpg"></a></li>
             <li class='index1'><a href="javascript:void(0)"><img src="http://cdn.jirengu.com/book.jirengu.com/img/2.jpg"></a></li>
             <li class='index2'><a href="javascript:void(0)"><img src="http://cdn.jirengu.com/book.jirengu.com/img/3.jpg"></a></li>
             <li class='index3'><a href="javascript:void(0)"><img src="http://cdn.jirengu.com/book.jirengu.com/img/4.jpg"></a></li>
@@ -103,58 +109,39 @@
     <script>
         var $btnPre = $('.btn-pre'),
             $picture = $('.picture'),
-            $btnNext = $('.btn-next'),
-            index = 1,
-            $lastItem = $picture.children().last().clone(),
-            $firstItem = $picture.children().first().clone();
-        $picture.prepend($lastItem)//克隆最后一份放到第一份的前面
-        $picture.append($firstItem)//克隆第一份放到最后一份的后面
-        $('.picture').css('margin-left','-500px')
+            $btnNext = $('.btn-next');
         $btnPre.on('click',function(){//点击左侧箭头执行此函数
             showPre(1)
         })
         $btnNext.on('click',function(){//点击右侧箭头执行此函数
             showNext(1)
         })
-
+        setInterval(function(){
+            showPre(1)
+        },3000)
         $('.index-bar').on('click','li',function(){//点击下侧状态条时，添加事件代理执行此匿名函数
-            var index = $('.active').index()//点击前，状态条的位置
-            var indexClick = $(this).index()//被点击时的状态条的位置
-            if(indexClick<index){
-                showPre(index-indexClick)
-            }else if(indexClick>index){
-                showNext(indexClick-index)
-            }
+            var posNow = $(this).index()//被点击时的状态条的位置
+            $('.index-bar>li').removeClass('active').eq(posNow)
+                                                  .addClass('active')
+            $('.picture>li').removeClass('active').eq(posNow)
+                                                  .addClass('active')
         })
         function showPre(n){
-            $('.picture').animate({'margin-left':'+='+500*n+'px'},function(){
-                if($('.picture').css('margin-left') === '0px'){//当图片播放到最前面的克隆元素后，瞬间切换到最后一张图片
-                    $('.picture').css('margin-left','-2500px')
-                }
-                index = index - n
-                changeBar(index)
-            })  
+            var posPre = $('.picture .active').index()
+            $('.picture>li').removeClass('active').eq(posPre-n)
+                                                  .addClass('active')
+            $('.index-bar>li').removeClass('active').eq(posPre-n)
+                                                  .addClass('active')
         }
         function showNext(n){
-            $('.picture').animate({'margin-left':'-='+500*n+'px'},function(){
-                if($('.picture').css('margin-left') === '-3000px'){//当图片播放到最后面的克隆元素后，瞬间切换到第一张图片
-                    $('.picture').css('margin-left','-500px')
-                }
-                index = index + n
-                console.log(index)
-                changeBar(index)
-            })
-        }
-        function changeBar(k){
-            if(k === 0){//当状态条的index值减到0时，瞬间切换到最后一个状态条
-                index = 5
-            }else if(k === 6){//当状态条的index值增加到6时，瞬间切换到第一个状态条
-                        index = 1
+            var posPre = $('.picture .active').index()
+            if(posPre === 4){
+                posPre = -1
             }
-            $('.bar').each(function(){
-                $(this).removeClass('active')
-            })
-            $('.bar:nth-child('+index+')').addClass('active')
+            $('.picture>li').removeClass('active').eq(posPre+n)
+                                                  .addClass('active')
+            $('.index-bar>li').removeClass('active').eq(posPre+n)
+                                                  .addClass('active')
         }
   	</script>
 </body>

@@ -6,5 +6,5 @@
 ### [task30](https://younger-peng.github.io/blog1/task30.html)
 ### [新闻懒加载](https://younger-peng.github.io/blog1/newscache.html)
 ### [图片懒加载](https://younger-peng.github.io/blog1/picturecache.html)
-### [轮播图](http://younger-peng.github.io/blog1/carousel.html)
-
+### [滚动轮播图](http://younger-peng.github.io/blog1/carousel.html)
+### [渐变轮播图]http://younger-peng.github.io/blog1/carouselGradient.html()
