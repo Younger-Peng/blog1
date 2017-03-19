@@ -8,3 +8,4 @@
 ### [图片懒加载](https://younger-peng.github.io/blog1/picturecache.html)
 ### [滚动轮播图](http://younger-peng.github.io/blog1/carousel.html)
 ### [渐变轮播图](http://younger-peng.github.io/blog1/carouselGradient.html)
+### [轮播图原理](http://younger-peng.github.io/blog1/ideaofcarousel.html)
